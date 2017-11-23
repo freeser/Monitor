@@ -1,0 +1,436 @@
+/* flex父元素上设置子元素水平方向对齐方式 */
+/* flex父元素上设置子元素垂直方向对齐方式 */
+/* 模拟边框 */
+/* 箭头 */
+/* 多行文本加省略号 */
+.colormain {
+  color: #27C06D;
+}
+.colorwarn {
+  color: #F298AA;
+}
+.main header {
+  background: #27C06D;
+}
+.main header .outerdiv {
+  margin: 3.5rem 27% 3rem;
+  color: #fff;
+}
+.main header .outerdiv .innerdiv {
+  position: relative;
+  padding-top: 100%;
+  height: 0;
+}
+.main header .outerdiv .innerdiv > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+.main header .outerdiv .innerdiv .maintxt {
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: -webkit-radial-gradient(circle, #27C06D, #6CF4B2);
+  background: -o-radial-gradient(circle, #27C06D, #6CF4B2);
+  background: radial-gradient(circle, #27C06D, #6CF4B2);
+  font-size: 1.25rem;
+}
+.main header .outerdiv .innerdiv .maintxt .big20 {
+  font-size: 4rem;
+  margin: 0 0 .8rem;
+}
+.main header .outerdiv .innerdiv .circle {
+  z-index: 1;
+  width: 108%;
+  height: 108%;
+  border: 1px solid #fff;
+  opacity: .6;
+}
+.main header .outerdiv .innerdiv .circle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  background: #fff;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.main header .outerdiv .discrible {
+  margin-top: 1.5em;
+}
+.main header .outerdiv .discrible a {
+  display: inline-block;
+  border-radius: .8em;
+  color: #fff;
+  background: #0C8649;
+  padding: 0 6px 0 10px;
+  line-height: 1.8;
+}
+.main header .outerdiv .icon-wifi {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #168850;
+  color: #fff;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  text-align: center;
+  line-height: 3rem;
+  font-size: 2rem;
+}
+.main header .outerdiv .icon-wifi.disabled {
+  opacity: .4;
+}
+.main header .stateonoff {
+  background: #0DA35A;
+  padding: 1rem;
+  color: #fff;
+}
+.main header .stateonoff .icon-icon {
+  background: #2b8130;
+  color: #fff;
+  padding: 1px;
+  border-radius: 2px;
+}
+.main header .stateonoff .item + .item {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid #84b78c;
+}
+.main header .stateonoff .progress {
+  position: relative;
+  text-align: center;
+}
+.main header .stateonoff .progress:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  display: inline-block;
+  height: 1rem;
+  width: 60%;
+  border-radius: 1rem;
+  z-index: 1;
+}
+.main header .stateonoff .progress i {
+  position: relative;
+  z-index: 2;
+  font-style: normal;
+}
+.main header .stateonoff .progress.blue::before {
+  background: #3a4aef;
+}
+.main header .stateonoff .progress.red::before {
+  background: #FF0000;
+}
+.main header .stateonoff .progress.orange::before {
+  background: #FFAD08;
+}
+.main .mainpage {
+  background: #F6F6F8;
+}
+.main .mainpage dl {
+  margin: 0 1rem;
+  padding: 1rem 0;
+}
+.main .mainpage dd + dd {
+  margin-top: 10px;
+}
+.main .mainpage dd .item {
+  background: #fff;
+  border-radius: 3px;
+}
+.main .mainpage dd .item + .item {
+  margin-left: 10px;
+}
+.main .mainpage dd p {
+  line-height: 1.5;
+}
+.main .mainpage dd p span {
+  display: inline-block;
+  padding: 0 1em;
+  background: #27C06D;
+  border-radius: 1em;
+  color: #fff;
+  margin-bottom: .45rem;
+}
+.main .remotebtn {
+  display: block;
+  background: #27C06D;
+  line-height: 3.5rem;
+  color: #fff;
+}
+.main .controlpage {
+  background: #fff;
+}
+.main .controlpage .icons {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.main .controlpage .close {
+  background-image: url(../img/close.png);
+}
+.main .controlpage .close-smart {
+  background-image: url(../img/close-smart.png);
+}
+.main .controlpage .handle {
+  background-image: url(../img/handle.png);
+}
+.main .controlpage .open {
+  background-image: url(../img/open.png);
+}
+.main .controlpage .open-smart {
+  background-image: url(../img/open-smart.png);
+}
+.main .controlpage .sleep {
+  background-image: url(../img/sleep.png);
+}
+.main .controlpage input:checked + .icons.close {
+  background-image: url(../img/close-active.png);
+}
+.main .controlpage input:checked + .icons.close-smart {
+  background-image: url(../img/close-smart-active.png);
+}
+.main .controlpage input:checked + .icons.handle {
+  background-image: url(../img/handle-active.png);
+}
+.main .controlpage input:checked + .icons.open {
+  background-image: url(../img/open-active.png);
+}
+.main .controlpage input:checked + .icons.open-smart {
+  background-image: url(../img/open-smart-active.png);
+}
+.main .controlpage input:checked + .icons.sleep {
+  background-image: url(../img/sleep-active.png);
+}
+.main .controlpage dd {
+  padding: 1rem 0;
+  margin: 0 1rem;
+}
+.main .controlpage dd span {
+  display: block;
+}
+.main .controlpage dd label {
+  position: relative;
+}
+.main .controlpage dd label input {
+  opacity: 0;
+  zoom: 0;
+  display: none;
+}
+.main .controlpage dd + dd {
+  border-top: 1px solid #eee;
+}
+.main footer {
+  padding: 1rem .5rem;
+}
+.main footer a[disabled] {
+  background: #ccc;
+}
+.main footer button {
+  background: #D0CDC7;
+  border: 0;
+  color: #fff;
+  height: 3rem;
+  line-height: 3rem;
+  font-size: 1.3rem;
+  border-radius: 4px;
+  padding: 0 .7rem;
+}
+.main footer button + button {
+  margin-left: .5rem;
+}
+.main footer button.active {
+  background: #27C06D;
+}
+.main footer button .iconfont {
+  font-size: 1.5rem;
+}
+.main footer .hastime {
+  position: relative;
+}
+.main footer .hastime input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.chartreport footer {
+  padding-bottom: 8rem;
+}
+.chartreport footer p {
+  text-align: center;
+  color: #27C06D;
+  font-size: 1.6rem;
+}
+.chartreport footer p .big20 {
+  color: #E58147;
+  font-size: 2rem;
+}
+.setpage #next dd {
+  padding: 1rem 0;
+}
+.setpage #next dd input {
+  width: 8rem;
+  height: 2rem;
+  margin-right: .5rem;
+}
+.setpage #next dd select {
+  width: 8.4rem;
+  height: 2.4rem;
+  margin-right: .5rem;
+}
+.setpage #next dd .block {
+  margin-bottom: 1rem;
+}
+.setpage button {
+  height: 4rem;
+  width: 100%;
+  background: #27C06D;
+  color: #fff;
+  border: 0;
+  border-radius: 3px;
+}
+.dialog {
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+}
+.dialog .dialog_content {
+  background: #fff;
+  padding: 1rem;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.dialog .customModel {
+  padding: 1rem 2rem;
+}
+.dialog .customModel button {
+  border: 0;
+  background: #27C06D;
+  color: #fff;
+  padding: .5rem 1rem;
+  border-radius: 3px;
+}
+.dialog .customModel button + button {
+  margin-left: .5rem;
+}
+.dialog .customModel .dialog_header button {
+  background: #d7f5dc;
+  color: #333;
+  zoom: .6;
+}
+.dialog .customModel .dialog_header .selected {
+  background: #27C06D;
+}
+.dialog .customModel .dialog_section {
+  padding: 1rem 0;
+}
+.dialog .customModel .dialog_section .iconfont {
+  color: #27C06D;
+}
+.dialog .customModel .dialog_section .small {
+  font-size: 1.2rem;
+}
+.dialog .customModel .dialog_section .big {
+  font-size: 1.8rem;
+}
+.dialog .customModel .dialog_section .zoomer {
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+}
+.dialog .customModel .dialog_section dd {
+  padding: 1rem 0;
+}
+.dialog .customModel .dialog_section dd label {
+  padding-right: 2em;
+}
+.dialog .customModel .dialog_section dd .span {
+  position: relative;
+  margin: 0 1rem;
+}
+.dialog .customModel .dialog_section dd input[type="range"] {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  opacity: 0;
+  z-index: 5;
+}
+.dialog .customModel .dialog_section dd .range {
+  position: relative;
+  display: block;
+  z-index: 1;
+  height: .5rem;
+  background: #ccc;
+  border-radius: 1rem;
+}
+.dialog .customModel .dialog_section dd .range .progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  border-radius: 1rem;
+  background: #27C06D;
+}
+.dialog .customModel .dialog_section dd .range .progress:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: #27C06D;
+  -webkit-box-shadow: 0 0 5px 0 #27C06D;
+  box-shadow: 0 0 5px 0 #27C06D;
+}
+.dialog .customModel .dialog_section dd .label {
+  position: absolute;
+  right: 0;
+  bottom: -1.5em;
+  color: #aaa;
+}
+.dialog .customModel .dialog_section dd .split {
+  height: 100%;
+}
+.dialog .customModel .dialog_section dd .split span {
+  position: relative;
+}
+.dialog .customModel .dialog_section dd .split span:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  background: #27C06D;
+}
