@@ -96,29 +96,18 @@
             </footer>
         </section>
         <section style="height: 0;">
-            <div class="fixed top left bottom right h100vh dialog" @click.self="mask=false" v-if="mask">
+            <div class="fixed top left bottom right h100vh dialog" @click.self="mask=false" v-show="mask">
                 <div class="dialog_content customModel fixed bottom left right">
                     <div class="dialog_header flex">
                         <button @click="selectCustom(-1)" :class="{'selected': customSelected == -1}">直接控制</button>
                         <button v-for="(item, idx) in customlist" :key="idx" @click="selectCustom(idx)" :class="{'selected': customSelected == idx}">{{item.name}}</button>
                     </div>
-                    <dl class="dialog_section">
+                    <dl id="myranger" class="dialog_section">
                         <dd class="flex acenter jcenter">
                             <label>风量</label>
                             <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
-                                <span class="range">
-                                    <!-- <span class="split flex">
-                                        <span class="flex_1"></span>
-                                        <span class="flex_1"></span>
-                                        <span class="flex_1"></span>
-                                        <span class="flex_1"></span>
-                                        <span class="flex_1"></span>
-                                    </span> -->
-                                    <i class="progress" :style="'width: '+ (custom.feng/30 * 100) +'%;'"></i>
-                                </span>
                                 <input type="range" name="fengliang" min="0" max="30" step="1" v-model="custom.feng">
-                                <!-- <span class="label">{{custom.feng}}</span> -->
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i>
                         </dd>
@@ -126,9 +115,6 @@
                             <label>间隔</label>
                             <i class="iconfont icon-shijian small"></i>
                             <span class="flex_1 span">
-                                <span class="range">
-                                    <i class="progress" :style="'width: '+ (custom.jian/30 * 100) +'%;'"></i>
-                                </span>
                                 <input type="range" name="jiange" min="1" max="30" step="1" v-model="custom.jian">
                                 <span class="label">{{custom.jian}}min</span>
                             </span>
@@ -152,6 +138,11 @@
     <script>
         var socket, timer, Ctrl;
         var deviceId = getParam('deviceId');
+        
+        var now = new Date(),
+            minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+            maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+        
         function getParam(name, href) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -194,9 +185,6 @@
                     ham.on('swipe', function(ev){
                         ev.direction == 4 && history.back();
                     });
-                    var now = new Date(),
-                        minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-                        maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
                     $('#datetimepicker').mobiscroll().datetime({
                         theme: 'ios',
@@ -214,6 +202,10 @@
                             that.formatDate = "";
                             msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
                         }
+                    });
+                    $('#myranger').mobiscroll().form({
+                        lang: 'zh',
+                        theme: 'material'
                     });
                 },
                 methods: {
@@ -234,8 +226,12 @@
                             this.custom = JSON.parse(JSON.stringify(this.custom));
                         }
                         this.customSelected = idx;
+                        // $('#myranger').mobiscroll('refresh');
+                        // $('#myranger').trigger('mbsc-refresh');
                     },
                     addCustom: function () {
+                        //console.log($('#myranger input[type="range"]:eq(0)').mobiscroll('getInst').getVal());
+                        //return ;
                         if (this.customSelected > -1) {
                             var item = this.customlist[this.customSelected];
                             item.key = this.custom;
@@ -301,7 +297,7 @@
                 interval: Ctrl.custom.jian, // 运行间隔
                 time: Ctrl.formatDate // 预约时间（yyyy-MM-dd HH:mm）
             };
-            
+            console.log(command);
             deviceId && socket.emit('order', jsonObject)
         }
 
