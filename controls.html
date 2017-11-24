@@ -12,86 +12,88 @@
 </head>
 
 <body style="display:none;">
-    <div id="controls" class="main flex column h100vh">
-        <header>
-            <div class="outerdiv">
-                <div class="innerdiv">
-                    <div class="circle"></div>
-                    <div class="maintxt tcenter flex acenter jcenter">
-                        <div>
-                            <div>风量</div>
-                            <div class="big20">{{windNum}}</div>
-                            <div>m³/h</div>
+    <div id="controls" class="ohidden">
+        <section id="hammer" class="main flex column h100vh">
+            <header>
+                <div class="outerdiv">
+                    <div class="innerdiv">
+                        <div class="circle"></div>
+                        <div class="maintxt tcenter flex acenter jcenter">
+                            <div>
+                                <div>风量</div>
+                                <div class="big20">{{windNum}}</div>
+                                <div>m³/h</div>
+                            </div>
                         </div>
                     </div>
+                    <a :href="deviceId ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !deviceId}"></a>
                 </div>
-                <a :href="deviceId ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !deviceId}"></a>
-            </div>
-            <div class="stateonoff flex">
-                <div class="flex_1 flex acenter jcenter item">
-                    <label>滤芯容量：</label>
-                    <span class="flex_1 progress orange">
-                        <i>60%</i>
-                    </span>
-                    <i class="iconfont icon-icon"></i>
+                <div class="stateonoff flex">
+                    <div class="flex_1 flex acenter jcenter item">
+                        <label>滤芯容量：</label>
+                        <span class="flex_1 progress orange">
+                            <i>60%</i>
+                        </span>
+                        <i class="iconfont icon-icon"></i>
+                    </div>
+                    <div class="flex_1 flex acenter jcenter item">
+                        <label>滤芯效率：</label>
+                        <span class="flex_1 progress red">
+                            <i>低</i>
+                        </span>
+                    </div>
                 </div>
-                <div class="flex_1 flex acenter jcenter item">
-                    <label>滤芯效率：</label>
-                    <span class="flex_1 progress red">
-                        <i>低</i>
-                    </span>
-                </div>
-            </div>
-        </header>
-        <section class="controlpage flex_1 scroll">
-            <dl>
-                <dd class="flex acenter">
-                    <label class="flex_1">辅热模式</label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="heatingModel" value="1">
-                        <span class="icons close-smart" @click="toggel('heating_auto')"></span>
-                        <span>智能模式</span>
-                    </label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="heatingModel" value="2">
-                        <span class="icons open" @click="toggel('heating_on')"></span>
-                        <span>常开</span>
-                    </label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="heatingModel" value="3">
-                        <span class="icons close" @click="toggel('heating_off')"></span>
-                        <span>常关</span>
-                    </label>
-                </dd>
-                <dd class="flex acenter jcenter">
-                    <label class="flex_1">风机模式</label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="windModel" value="1">
-                        <span class="icons open-smart" @click="toggel('wind_auto')"></span>
-                        <span>智能模式</span>
-                    </label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="windModel" value="2">
-                        <span class="icons handle" @click="toggel('wind_manual')"></span>
-                        <span>手动模式</span>
-                    </label>
-                    <label class="tcenter flex_1">
-                        <input type="radio" v-model="windModel" value="3">
-                        <span class="icons sleep" @click="toggel('sleep')"></span>
-                        <span>睡眠模式</span>
-                    </label>
-                </dd>
-            </dl>
+            </header>
+            <section class="controlpage flex_1 scroll">
+                <dl>
+                    <dd class="flex acenter">
+                        <label class="flex_1">辅热模式</label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="heatingModel" value="1">
+                            <span class="icons close-smart" @click="toggel('heating_auto')"></span>
+                            <span>智能模式</span>
+                        </label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="heatingModel" value="2">
+                            <span class="icons open" @click="toggel('heating_on')"></span>
+                            <span>常开</span>
+                        </label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="heatingModel" value="3">
+                            <span class="icons close" @click="toggel('heating_off')"></span>
+                            <span>常关</span>
+                        </label>
+                    </dd>
+                    <dd class="flex acenter jcenter">
+                        <label class="flex_1">风机模式</label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="windModel" value="1">
+                            <span class="icons open-smart" @click="toggel('wind_auto')"></span>
+                            <span>智能模式</span>
+                        </label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="windModel" value="2">
+                            <span class="icons handle" @click="toggel('wind_manual')"></span>
+                            <span>手动模式</span>
+                        </label>
+                        <label class="tcenter flex_1">
+                            <input type="radio" v-model="windModel" value="3">
+                            <span class="icons sleep" @click="toggel('sleep')"></span>
+                            <span>睡眠模式</span>
+                        </label>
+                    </dd>
+                </dl>
+            </section>
+            <footer class="flex">
+                <button type="button" class="flex_1" :class="{'active': powerOn}" @click="powerManager">
+                    <i class="iconfont icon-guanji"></i> {{ !powerOn ? "开机" : "关机"}}
+                </button>
+                <button type="button" class="hastime ohidden">
+                    <i class="iconfont icon-dingshi"></i> 定时{{ !powerOn ? "开机" : "关机"}}
+                    <input type="datetime-local" v-model="datetimepicker" @change="selectime">
+                </button>
+            </footer>
         </section>
-        <footer class="flex">
-            <button type="button" class="flex_1" :class="{'active': powerOn}" @click="powerManager">
-                <i class="iconfont icon-guanji"></i> {{ !powerOn ? "开机" : "关机"}}
-            </button>
-            <button type="button" class="hastime ohidden">
-                <i class="iconfont icon-dingshi"></i> 定时{{ !powerOn ? "开机" : "关机"}}
-                <input type="datetime-local" v-model="datetimepicker" @change="selectime">
-            </button>
-        </footer>
         <section style="height: 0;">
             <div class="fixed top left bottom right h100vh dialog" @click.self="mask=false" v-if="mask">
                 <div class="dialog_content customModel fixed bottom left right">
@@ -112,9 +114,9 @@
                                         <span class="flex_1"></span>
                                         <span class="flex_1"></span>
                                     </span> -->
-                                    <i class="progress" :style="'width: '+ (custom.feng/5 * 100) +'%;'"></i>
+                                    <i class="progress" :style="'width: '+ (custom.feng/30 * 100) +'%;'"></i>
                                 </span>
-                                <input type="range" name="fengliang" min="0" max="5" step="1" v-model="custom.feng">
+                                <input type="range" name="fengliang" min="0" max="30" step="1" v-model="custom.feng">
                                 <!-- <span class="label">{{custom.feng}}</span> -->
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i>
@@ -162,11 +164,7 @@
             msgToSer('refresh');
         }
         initPage();
-        // 手式
-        var ham = new Hammer(document.getElementById('controls'));
-        ham.on('swipe', function(ev){
-            ev.direction == 4 && history.back();
-        });
+        
         function initPage() {
             Ctrl = new Vue({
                 el: '#controls',
@@ -189,6 +187,11 @@
                 mounted() {
                     this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
                     document.getElementsByTagName('body')[0].style.display = 'block';
+                    // 手式
+                    var ham = new Hammer(document.getElementById('hammer'));
+                    ham.on('swipe', function(ev){
+                        ev.direction == 4 && history.back();
+                    });
                 },
                 methods: {
                     toggel: function (key) {
