@@ -8,6 +8,7 @@
     <script src="js/fontsize.js"></script>
     <link rel="stylesheet" href="font/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="libs/mobiscroll/css/mobiscroll.jquery.min.css">
     <link rel="stylesheet" href="css/style.css?a=c">
 </head>
 
@@ -90,7 +91,7 @@
                 </button>
                 <button type="button" class="hastime ohidden">
                     <i class="iconfont icon-dingshi"></i> 定时{{ !powerOn ? "开机" : "关机"}}
-                    <input type="datetime-local" v-model="datetimepicker" @change="selectime">
+                    <input type="datetime-local" id="datetimepicker">
                 </button>
             </footer>
         </section>
@@ -141,9 +142,10 @@
             </div>
         </section>
     </div>
-    <script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery.min.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/socket.io.js"></script>
+    <script src="libs/mobiscroll/js/mobiscroll.jquery.min.js"></script>
     <script src="js/debounce.js"></script>
     <script src="js/prop.js"></script>
     <script src="js/hammer.min.js"></script>
@@ -181,16 +183,37 @@
                     mask: false,
                     customlist: [],
                     customSelected: -1,
-                    datetimepicker: '',
                     formatDate: ''
                 },
                 mounted() {
+                    var that = this;
                     this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
                     document.getElementsByTagName('body')[0].style.display = 'block';
                     // 手式
                     var ham = new Hammer(document.getElementById('hammer'));
                     ham.on('swipe', function(ev){
                         ev.direction == 4 && history.back();
+                    });
+                    var now = new Date(),
+                        minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+                        maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+
+                    $('#datetimepicker').mobiscroll().datetime({
+                        theme: 'ios',
+                        display: 'bottom',
+                        lang: 'zh',
+                        min: minDate,
+                        max: maxDate,
+                        dateWheels: '|yyyy-mm-dd|',
+                        onSet: function(e, inst) {
+                            var time = e.valueText || '';
+                            that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
+                            msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
+                        },
+                        onCancel: function(e, inst) {
+                            that.formatDate = "";
+                            msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
+                        }
                     });
                 },
                 methods: {
@@ -227,10 +250,6 @@
                             alert('添加 '+ name +' 成功');
                         }
                         localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
-                    },
-                    selectime: function () {
-                        this.formatDate = new Date(this.datetimepicker).Format('yyyy-MM-dd hh:mm')
-                        msgToSer(this.powerOn ? 'power_off_time' : 'power_on_time')
                     }
                 },
                 watch: {
