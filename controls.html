@@ -144,6 +144,7 @@
     <script src="js/socket.io.js"></script>
     <script src="js/debounce.js"></script>
     <script src="js/prop.js"></script>
+    <script src="js/hammer.min.js"></script>
     <script>
         var socket, timer, Ctrl;
         var deviceId = getParam('deviceId');
@@ -161,7 +162,11 @@
             msgToSer('refresh');
         }
         initPage();
-
+        // 手式
+        var ham = new Hammer(document.getElementById('controls'));
+        ham.on('swipe', function(ev){
+            ev.direction == 4 && history.back();
+        });
         function initPage() {
             Ctrl = new Vue({
                 el: '#controls',

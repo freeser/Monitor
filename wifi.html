@@ -40,7 +40,7 @@
                                 var err_msg = res.err_msg;
                                 if (err_msg == 'configWXDeviceWiFi:ok') {
                                     alert("配置成功");
-                                    history.back();
+                                    location.replace('index.html');
                                 } else {
                                     alert("配置失败");
                                 }

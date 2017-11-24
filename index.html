@@ -12,6 +12,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/socket.io.js"></script>
     <script src="js/vue.min.js"></script>
+    <script src="js/hammer.min.js"></script>
   </head>
 
   <body style="display:none;">
@@ -151,7 +152,13 @@
       }).done(function (data) {
         deviceId = data.deviceid;
         if (!deviceId) {
-          location.href = 'wifi.html';
+          location.replace('wifi.html');
+        } else {
+          // 手式
+          var ham = new Hammer(document.getElementById('main'));
+          ham.on('swipe', function(ev){
+            ev.direction == 2 && (location.href = 'controls.html?deviceId=' + deviceId)
+          });
         }
       }).always(function () {
         initPage();
