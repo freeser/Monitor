@@ -235,12 +235,14 @@
                         alert('更新 ' + item.name + ' 成功');
                     } else if (this.customlist.length < 4) {
                         var name = prompt('请输入一个名称', '收藏' + this.customlist.length);
-                        this.customlist.push({
-                            name: name,
-                            key: this.custom
-                        });
-                        this.customSelected = this.customlist.length - 1;
-                        alert('添加 ' + name + ' 成功');
+                        if (name) {
+                            this.customlist.push({
+                                name: name,
+                                key: this.custom
+                            });
+                            this.customSelected = this.customlist.length - 1;
+                            alert('添加 ' + name + ' 成功');
+                        }
                     }
                     localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
                 }
