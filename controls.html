@@ -299,7 +299,6 @@
                 interval: Ctrl.custom.jian, // 运行间隔
                 time: Ctrl.formatDate // 预约时间（yyyy-MM-dd HH:mm）
             };
-            console.log(command);
             deviceId && socket.emit('order', jsonObject)
         }
 
