@@ -6,14 +6,18 @@
     <meta name=viewport content="width=device-width,height=device-height,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
     <title>远程遥控</title>
     <script src="js/fontsize.js"></script>
+    <link rel="stylesheet" href="css/css.css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="libs/mobiscroll/css/mobiscroll.jquery.min.css">
+    <link rel="stylesheet" href="libs/muse-ui/dist/muse-ui.css">
+    <link rel="stylesheet" href="libs/muse-ui/dist/theme-teal.min.css">
     <link rel="stylesheet" href="font/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="libs/mobiscroll/css/mobiscroll.jquery.min.css">
     <link rel="stylesheet" href="css/style.css?a=c">
 </head>
 
 <body style="display:none;">
-    <div id="controls" class="ohidden">
+    <div id="app" class="ohidden">
         <section id="hammer" class="main flex column h100vh">
             <header>
                 <div class="outerdiv">
@@ -107,7 +111,7 @@
                             <label>风量</label>
                             <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
-                                <input type="range" name="fengliang" min="0" max="30" step="1" v-model="custom.feng">
+                                <mu-slider v-model="custom.feng" :min="0" :max="30" :step="1"></mu-slider>
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i>
                         </dd>
@@ -115,7 +119,7 @@
                             <label>间隔</label>
                             <i class="iconfont icon-shijian small"></i>
                             <span class="flex_1 span">
-                                <input type="range" name="jiange" min="1" max="30" step="1" v-model="custom.jian">
+                                <mu-slider v-model="custom.jian" :min="0" :max="30" :step="1"></mu-slider>
                                 <span class="label">{{custom.jian}}min</span>
                             </span>
                             <i class="iconfont icon-shijian big"></i>
@@ -129,8 +133,9 @@
         </section>
     </div>
     <script src="js/jquery.min.js"></script>
-    <script src="js/vue.min.js"></script>
+    <script src="js/vue.js"></script>
     <script src="js/socket.io.js"></script>
+    <script src="libs/muse-ui/dist/muse-ui.js"></script>
     <script src="libs/mobiscroll/js/mobiscroll.jquery.min.js"></script>
     <script src="js/debounce.js"></script>
     <script src="js/prop.js"></script>
@@ -138,11 +143,11 @@
     <script>
         var socket, timer, Ctrl;
         var deviceId = getParam('deviceId');
-        
+
         var now = new Date(),
             minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
             maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-        
+
         function getParam(name, href) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -156,107 +161,104 @@
             timer = window.setTimeout(refresh, 10000);
             msgToSer('refresh');
         }
-        initPage();
-        
-        function initPage() {
-            Ctrl = new Vue({
-                el: '#controls',
-                data: {
-                    deviceId: deviceId,
-                    windNum: '-',
-                    heatingModel: 1,
-                    windModel: 1,
-                    powerOn: false,
-                    custom: {
-                        feng: 2,
-                        jian: 8
-                    },
-                    mask: false,
-                    customlist: [],
-                    customSelected: -1,
-                    formatDate: ''
-                },
-                mounted() {
-                    var that = this;
-                    this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
-                    document.getElementsByTagName('body')[0].style.display = 'block';
-                    // 手式
-                    var ham = new Hammer(document.getElementById('hammer'));
-                    ham.on('swipe', function(ev){
-                        ev.direction == 4 && history.back();
-                    });
 
-                    $('#datetimepicker').mobiscroll().datetime({
-                        theme: 'ios',
-                        display: 'bottom',
-                        lang: 'zh',
-                        min: minDate,
-                        max: maxDate,
-                        dateWheels: '|yyyy-mm-dd|',
-                        onSet: function(e, inst) {
-                            var time = e.valueText || '';
-                            that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
-                            msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
-                        },
-                        onCancel: function(e, inst) {
-                            that.formatDate = "";
-                            msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
-                        }
-                    });
-                    $('#myranger').mobiscroll().form({
-                        lang: 'zh',
-                        theme: 'material'
-                    });
+        Vue.use(MuseUI);
+
+        Ctrl = new Vue({
+            el: '#app',
+            data: {
+                deviceId: deviceId,
+                windNum: '-',
+                heatingModel: 1,
+                windModel: 1,
+                powerOn: false,
+                custom: {
+                    feng: 2,
+                    jian: 8
                 },
-                methods: {
-                    toggel: function (key) {
-                        if (key == 'wind_manual') {
-                            this.mask = true;
-                        }
-                        msgToSer(key);
+                mask: false,
+                customlist: [],
+                customSelected: -1,
+                formatDate: ''
+            },
+            mounted() {
+                var that = this;
+                this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
+                document.getElementsByTagName('body')[0].style.display = 'block';
+                // 手式
+                var ham = new Hammer(document.getElementById('hammer'));
+                ham.on('swipe', function (ev) {
+                    ev.direction == 4 && history.back();
+                });
+
+                $('#datetimepicker').mobiscroll().datetime({
+                    theme: 'ios',
+                    display: 'bottom',
+                    lang: 'zh',
+                    min: minDate,
+                    max: maxDate,
+                    dateWheels: '|yyyy-mm-dd|',
+                    onSet: function (e, inst) {
+                        var time = e.valueText || '';
+                        that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
+                        msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
                     },
-                    powerManager: function () {
-                        msgToSer('power');
-                    },
-                    selectCustom: function (idx) {
-                        if (idx != -1) {
-                            var item = this.customlist[idx];
-                            this.custom = JSON.parse(JSON.stringify(item.key || this.custom));
-                        } else {
-                            this.custom = JSON.parse(JSON.stringify(this.custom));
-                        }
-                        this.customSelected = idx;
-                        // $('#myranger').mobiscroll('refresh');
-                        // $('#myranger').trigger('mbsc-refresh');
-                    },
-                    addCustom: function () {
-                        //console.log($('#myranger input[type="range"]:eq(0)').mobiscroll('getInst').getVal());
-                        //return ;
-                        if (this.customSelected > -1) {
-                            var item = this.customlist[this.customSelected];
-                            item.key = this.custom;
-                            alert('更新 ' + item.name + ' 成功');
-                        } else if (this.customlist.length < 4) {
-                            var name = prompt('请输入一个名称', '收藏' + this.customlist.length);
-                            this.customlist.push({
-                                name: name,
-                                key: this.custom
-                            });
-                            this.customSelected = this.customlist.length - 1;
-                            alert('添加 '+ name +' 成功');
-                        }
-                        localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
+                    onCancel: function (e, inst) {
+                        that.formatDate = "";
+                        msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
                     }
+                });
+            },
+            methods: {
+                toggel: function (key) {
+                    if (key == 'wind_manual') {
+                        this.mask = true;
+                    }
+                    msgToSer(key);
                 },
-                watch: {
-                    'custom.feng': debounce(200, false, function (v) {
-                        msgToSer('wind_level');
-                    }),
-                    'custom.jian': debounce(200, false, function (v) {
-                        msgToSer('wind_interval');
-                    })
+                powerManager: function () {
+                    msgToSer('power');
+                },
+                selectCustom: function (idx) {
+                    if (idx != -1) {
+                        var item = this.customlist[idx];
+                        this.custom = JSON.parse(JSON.stringify(item.key || this.custom));
+                    } else {
+                        this.custom = JSON.parse(JSON.stringify(this.custom));
+                    }
+                    this.customSelected = idx;
+                },
+                addCustom: function () {
+                    if (this.customSelected > -1) {
+                        var item = this.customlist[this.customSelected];
+                        item.key = this.custom;
+                        alert('更新 ' + item.name + ' 成功');
+                    } else if (this.customlist.length < 4) {
+                        var name = prompt('请输入一个名称', '收藏' + this.customlist.length);
+                        this.customlist.push({
+                            name: name,
+                            key: this.custom
+                        });
+                        this.customSelected = this.customlist.length - 1;
+                        alert('添加 ' + name + ' 成功');
+                    }
+                    localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
                 }
-            });
+            },
+            watch: {
+                'custom.feng': debounce(200, false, function (v) {
+                    msgToSer('wind_level');
+                }),
+                'custom.jian': debounce(200, false, function (v) {
+                    msgToSer('wind_interval');
+                })
+            }
+        });
+
+
+        initPage();
+
+        function initPage() {
             socket = io.connect('http://www.windme.cn:3000/')
             socket.on('connect', function () {
                 log('连接成功：' + socket.id);

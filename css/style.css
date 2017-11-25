@@ -365,6 +365,10 @@
 }
 .dialog .customModel .dialog_section dd .span {
   position: relative;
+  margin: 0 1rem;
+}
+.dialog .customModel .dialog_section dd .mu-slider {
+  margin-bottom: 0;
 }
 .dialog .customModel .dialog_section dd .label {
   position: absolute;
@@ -372,19 +376,10 @@
   bottom: -1em;
   color: #aaa;
 }
-.mbsc-material.mbsc-form {
-  background: transparent;
-}
-.mbsc-material.mbsc-progress {
-  padding: 0 1em;
-}
-.mbsc-material .mbsc-slider-handle {
+.mu-slider-thumb {
   background-color: #27C06D;
-  border-color: #27C06D;
+  color: #27C06D;
 }
-.mbsc-material .mbsc-progress-bar {
+.mu-slider-fill {
   background-color: #27C06D;
-}
-.mbsc-material .mbsc-progress-cont {
-  padding: .75em 0;
 }
