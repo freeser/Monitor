@@ -100,6 +100,7 @@
                     <div class="dialog_header flex">
                         <button @click="selectCustom(-1)" :class="{'selected': customSelected == -1}">直接控制</button>
                         <button v-for="(item, idx) in customlist" :key="idx" @click="selectCustom(idx)" :class="{'selected': customSelected == idx}">{{item.name}}</button>
+                        <button v-if="customlist.length" @click="clearstar">清除收藏</button>
                     </div>
                     <dl id="myranger" class="dialog_section">
                         <dd class="flex acenter jcenter">
@@ -195,24 +196,6 @@
                 ham.on('swipe', function (ev) {
                     ev.direction == 4 && history.back();
                 });
-
-                // $('#datetimepicker').mobiscroll().datetime({
-                //     theme: 'ios',
-                //     display: 'bottom',
-                //     lang: 'zh',
-                //     min: minDate,
-                //     max: maxDate,
-                //     dateWheels: '|yyyy-mm-dd|',
-                //     onSet: function (e, inst) {
-                //         var time = e.valueText || '';
-                //         that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
-                //         msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
-                //     },
-                //     onCancel: function (e, inst) {
-                //         that.formatDate = "";
-                //         msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
-                //     }
-                // });
             },
             methods: {
                 toggel: function (key) {
@@ -258,6 +241,11 @@
                         }
                     }
                     localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
+                },
+                clearstar: function () {
+                    this.customSelected = -1;
+                    this.customlist = [];
+                    localStorage.removeItem('_cache_custom_');
                 }
             },
             watch: {
