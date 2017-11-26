@@ -6,14 +6,10 @@
     <meta name=viewport content="width=device-width,height=device-height,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
     <title>远程遥控</title>
     <script src="js/fontsize.js"></script>
-    <link rel="stylesheet" href="css/css.css?family=Roboto:300,400,500,700,400italic">
-    <link rel="stylesheet" href="css/icon.css">
-    <link rel="stylesheet" href="libs/mobiscroll/css/mobiscroll.jquery.min.css">
-    <link rel="stylesheet" href="libs/muse-ui/dist/muse-ui.css">
-    <link rel="stylesheet" href="libs/muse-ui/dist/theme-teal.min.css">
+    <link rel="stylesheet" href="libs/mint-ui/style.css">
     <link rel="stylesheet" href="font/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css?a=c">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body style="display:none;">
@@ -93,9 +89,8 @@
                 <button type="button" class="flex_1" :class="{'active': powerOn}" @click="powerManager">
                     <i class="iconfont icon-guanji"></i> {{ !powerOn ? "开机" : "关机"}}
                 </button>
-                <button type="button" class="hastime ohidden">
+                <button type="button" class="hastime ohidden" @click="openpicker">
                     <i class="iconfont icon-dingshi"></i> 定时{{ !powerOn ? "开机" : "关机"}}
-                    <input type="datetime-local" id="datetimepicker">
                 </button>
             </footer>
         </section>
@@ -111,7 +106,7 @@
                             <label>风量</label>
                             <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
-                                <mu-slider v-model="custom.feng" :min="0" :max="30" :step="1"></mu-slider>
+                                <mt-range v-model="custom.feng" :bar-height="5" :min="0" :max="30" :step="1"></mt-range>
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i>
                         </dd>
@@ -119,7 +114,7 @@
                             <label>间隔</label>
                             <i class="iconfont icon-shijian small"></i>
                             <span class="flex_1 span">
-                                <mu-slider v-model="custom.jian" :min="0" :max="30" :step="1"></mu-slider>
+                                <mt-range v-model="custom.jian" :bar-height="5" :min="0" :max="30" :step="1"></mt-range>
                                 <span class="label">{{custom.jian}}min</span>
                             </span>
                             <i class="iconfont icon-shijian big"></i>
@@ -130,23 +125,26 @@
                     </div>
                 </div>
             </div>
+            <mt-datetime-picker
+                ref="datetime"
+                v-model="currDate"
+                :start-date="minDate"
+                :end-date="maxDate"
+                @cancel="chooseDate"
+                @confirm="chooseDate">
+            </mt-datetime-picker>
         </section>
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/socket.io.js"></script>
-    <script src="libs/muse-ui/dist/muse-ui.js"></script>
-    <script src="libs/mobiscroll/js/mobiscroll.jquery.min.js"></script>
+    <script src="libs/mint-ui/index.js"></script>
     <script src="js/debounce.js"></script>
     <script src="js/prop.js"></script>
     <script src="js/hammer.min.js"></script>
     <script>
         var socket, timer, Ctrl;
         var deviceId = getParam('deviceId');
-
-        var now = new Date(),
-            minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-            maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
         function getParam(name, href) {
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -162,7 +160,7 @@
             msgToSer('refresh');
         }
 
-        Vue.use(MuseUI);
+        Vue.use(MINT);
 
         Ctrl = new Vue({
             el: '#app',
@@ -179,9 +177,16 @@
                 mask: false,
                 customlist: [],
                 customSelected: -1,
-                formatDate: ''
+                currDate: '',
+                formatDate: '',
+                minDate: new Date(),
+                maxDate: new Date()
             },
-            mounted() {
+            created: function () {
+                var now = new Date();
+                this.maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate())
+            },
+            mounted: function () {
                 var that = this;
                 this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
                 document.getElementsByTagName('body')[0].style.display = 'block';
@@ -191,23 +196,23 @@
                     ev.direction == 4 && history.back();
                 });
 
-                $('#datetimepicker').mobiscroll().datetime({
-                    theme: 'ios',
-                    display: 'bottom',
-                    lang: 'zh',
-                    min: minDate,
-                    max: maxDate,
-                    dateWheels: '|yyyy-mm-dd|',
-                    onSet: function (e, inst) {
-                        var time = e.valueText || '';
-                        that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
-                        msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
-                    },
-                    onCancel: function (e, inst) {
-                        that.formatDate = "";
-                        msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
-                    }
-                });
+                // $('#datetimepicker').mobiscroll().datetime({
+                //     theme: 'ios',
+                //     display: 'bottom',
+                //     lang: 'zh',
+                //     min: minDate,
+                //     max: maxDate,
+                //     dateWheels: '|yyyy-mm-dd|',
+                //     onSet: function (e, inst) {
+                //         var time = e.valueText || '';
+                //         that.formatDate = new Date(time).Format('yyyy-MM-dd hh:mm');
+                //         msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time');
+                //     },
+                //     onCancel: function (e, inst) {
+                //         that.formatDate = "";
+                //         msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
+                //     }
+                // });
             },
             methods: {
                 toggel: function (key) {
@@ -218,6 +223,14 @@
                 },
                 powerManager: function () {
                     msgToSer('power');
+                },
+                openpicker: function () {
+                    this.minDate = new Date();
+                    this.$refs.datetime.open();
+                },
+                chooseDate: function (value) {
+                    this.formatDate = value ? value.Format('yyyy-MM-dd hh:mm') : '';
+                    msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
                 },
                 selectCustom: function (idx) {
                     if (idx != -1) {

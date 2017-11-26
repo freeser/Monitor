@@ -376,10 +376,15 @@
   bottom: -1em;
   color: #aaa;
 }
-.mu-slider-thumb {
-  background-color: #27C06D;
-  color: #27C06D;
+.mt-range {
+  height: 2rem;
+  line-height: 2rem;
 }
-.mu-slider-fill {
+.mt-range .mt-range-thumb {
+  background-color: #27C06D;
+  height: 2rem;
+  width: 2rem;
+}
+.mt-range .mt-range-progress {
   background-color: #27C06D;
 }
