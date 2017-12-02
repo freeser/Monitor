@@ -107,11 +107,11 @@
                             <label>风量</label>
                             <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
-                                <mt-range v-model="custom.feng" :bar-height="5" :min="0" :max="5" :step="1"></mt-range>
+                                <mt-range v-model="custom.feng" :bar-height="5" :min="1" :max="5" :step="1"></mt-range>
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i>
                         </dd>
-                        <dd class="flex acenter jcenter">
+                        <!-- <dd class="flex acenter jcenter">
                             <label>间隔</label>
                             <i class="iconfont icon-shijian small"></i>
                             <span class="flex_1 span">
@@ -119,7 +119,7 @@
                                 <span class="label">{{custom.jian}}min</span>
                             </span>
                             <i class="iconfont icon-shijian big"></i>
-                        </dd>
+                        </dd> -->
                     </dl>
                     <div class="dialog_footer tright" v-if="customlist.length < 4 || customSelected != -1">
                         <button @click="addCustom">收藏</button>
@@ -172,8 +172,8 @@
                 windModel: 1,
                 powerOn: false,
                 custom: {
-                    feng: 2,
-                    jian: 8
+                    feng: 2
+                    // jian: 8
                 },
                 mask: false,
                 customlist: [],
@@ -299,7 +299,7 @@
                 deviceId: deviceId,
                 command: command,
                 level: Ctrl.custom.feng, // 风量等级
-                interval: Ctrl.custom.jian, // 运行间隔
+                // interval: Ctrl.custom.jian, // 运行间隔
                 time: Ctrl.formatDate // 预约时间（yyyy-MM-dd HH:mm）
             };
             deviceId && socket.emit('order', jsonObject)
