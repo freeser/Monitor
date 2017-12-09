@@ -111,25 +111,25 @@
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i> -->
                             
-                            <label class="tcenter flex_1">
+                            <label class="tcenter flex_1 xbutton">
                                 <input type="radio" v-model="custom.feng" value="1" >
-                                <span>1</span>
+                                <span>一级</span>
                             </label>
-                            <label class="tcenter flex_1">
+                            <label class="tcenter flex_1 xbutton">
                                 <input type="radio" v-model="custom.feng" value="2" >
-                                <span>2</span>
+                                <span>二级</span>
                             </label>
-                            <label class="tcenter flex_1">
+                            <label class="tcenter flex_1 xbutton">
                                 <input type="radio" v-model="custom.feng" value="3" >
-                                <span>3</span>
+                                <span>三级</span>
                             </label>
-                            <label class="tcenter flex_1">
+                            <label class="tcenter flex_1 xbutton">
                                 <input type="radio" v-model="custom.feng" value="4" >
-                                <span>4</span>
+                                <span>四级</span>
                             </label>
-                            <label class="tcenter flex_1">
+                            <label class="tcenter flex_1 xbutton">
                                 <input type="radio" v-model="custom.feng" value="5" >
-                                <span>5</span>
+                                <span>五级</span>
                             </label>
                         </dd>
                         <!-- <dd class="flex acenter jcenter">
@@ -209,7 +209,6 @@
                 this.maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate())
             },
             mounted: function () {
-                var that = this;
                 this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
                 document.getElementsByTagName('body')[0].style.display = 'block';
                 // 手式
@@ -234,7 +233,7 @@
                 },
                 chooseDate: function (value) {
                     this.formatDate = value ? value.Format('yyyy-MM-dd hh:mm') : '';
-                    msgToSer(that.powerOn ? 'power_off_time' : 'power_on_time')
+                    msgToSer(this.powerOn ? 'power_off_time' : 'power_on_time')
                 },
                 selectCustom: function (idx) {
                     if (idx != -1) {

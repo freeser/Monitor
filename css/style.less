@@ -304,7 +304,7 @@
                 box-sizing: border-box;
     }
     .customModel{
-        padding: 1rem 2rem;
+        padding: 1rem;
         button{
             border: 0; background: @main-color; color: #fff;
             padding: .5rem 1rem; border-radius: 3px;
@@ -340,9 +340,6 @@
             }
             dd{
                 padding: .5rem 0;
-                label{
-                    padding-right: 2em;
-                }
                 .span{
                     position: relative;
                     margin: 0 1rem;
@@ -353,6 +350,26 @@
                 .label{
                     position: absolute; right: 1.5em;
                     bottom: -1em; color: #aaa;
+                }
+                .xbutton{
+                    position: relative;
+                    margin-left: .8rem;
+                    span{
+                        display: block;
+                        background: #fff;
+                        border-radius: 3px;
+                        padding: .5rem 0;
+                        text-align: center;
+                        border: 1px solid #0C8649;
+                    }
+                    input{
+                        position: absolute;zoom: 2;
+                        opacity: 0;
+                    }
+                    :checked + span{
+                        background: #0C8649;
+                        color: #fff;
+                    }
                 }
             }
         }

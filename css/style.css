@@ -320,7 +320,7 @@
   box-sizing: border-box;
 }
 .dialog .customModel {
-  padding: 1rem 2rem;
+  padding: 1rem;
 }
 .dialog .customModel button {
   border: 0;
@@ -360,9 +360,6 @@
 .dialog .customModel .dialog_section dd {
   padding: .5rem 0;
 }
-.dialog .customModel .dialog_section dd label {
-  padding-right: 2em;
-}
 .dialog .customModel .dialog_section dd .span {
   position: relative;
   margin: 0 1rem;
@@ -375,6 +372,27 @@
   right: 1.5em;
   bottom: -1em;
   color: #aaa;
+}
+.dialog .customModel .dialog_section dd .xbutton {
+  position: relative;
+  margin-left: .8rem;
+}
+.dialog .customModel .dialog_section dd .xbutton span {
+  display: block;
+  background: #fff;
+  border-radius: 3px;
+  padding: .5rem 0;
+  text-align: center;
+  border: 1px solid #0C8649;
+}
+.dialog .customModel .dialog_section dd .xbutton input {
+  position: absolute;
+  zoom: 2;
+  opacity: 0;
+}
+.dialog .customModel .dialog_section dd .xbutton :checked + span {
+  background: #0C8649;
+  color: #fff;
 }
 .mt-range {
   height: 2rem;
