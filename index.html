@@ -30,7 +30,7 @@
               <i class="iconfont icon-more"></i>
             </a>
           </div>
-          <a :href="deviceId ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !deviceId}"></a>
+          <a :href="isOnLine ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !isOnLine}"></a>
         </div>
       </header>
       <section class="mainpage flex_1 scroll">
@@ -102,7 +102,7 @@
         </dl>
       </section>
       <footer>
-        <a :href="deviceId ? 'controls.html?deviceId=' + deviceId : '#'" :disabled="!deviceId" class="remotebtn tcenter big18">远程控制</a>
+        <a :href="isOnLine ? 'controls.html?deviceId=' + deviceId : '#'" :disabled="!isOnLine" class="remotebtn tcenter big18">远程控制</a>
       </footer>
     </div>
     <script src="js/jquery.min.js"></script>
