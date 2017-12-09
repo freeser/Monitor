@@ -97,19 +97,40 @@
         <section style="height: 0;">
             <div class="fixed top left bottom right h100vh dialog" @click.self="mask=false" v-show="mask">
                 <div class="dialog_content customModel fixed bottom left right">
-                    <div class="dialog_header flex">
+                    <!-- <div class="dialog_header flex">
                         <button @click="selectCustom(-1)" :class="{'selected': customSelected == -1}">直接控制</button>
                         <button v-for="(item, idx) in customlist" :key="idx" @click="selectCustom(idx)" :class="{'selected': customSelected == idx}">{{item.name}}</button>
                         <button v-if="customlist.length" @click="clearstar">清除收藏</button>
-                    </div>
+                    </div> -->
                     <dl id="myranger" class="dialog_section">
                         <dd class="flex acenter jcenter">
                             <label>风量</label>
-                            <i class="iconfont icon-fengshan small zoomer"></i>
+                            <!-- <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
                                 <mt-range v-model="custom.feng" :bar-height="5" :min="1" :max="5" :step="1"></mt-range>
                             </span>
-                            <i class="iconfont icon-fengshan big zoomer"></i>
+                            <i class="iconfont icon-fengshan big zoomer"></i> -->
+                            
+                            <label class="tcenter flex_1">
+                                <input type="radio" v-model="custom.feng" value="1" >
+                                <span>1</span>
+                            </label>
+                            <label class="tcenter flex_1">
+                                <input type="radio" v-model="custom.feng" value="2" >
+                                <span>2</span>
+                            </label>
+                            <label class="tcenter flex_1">
+                                <input type="radio" v-model="custom.feng" value="3" >
+                                <span>3</span>
+                            </label>
+                            <label class="tcenter flex_1">
+                                <input type="radio" v-model="custom.feng" value="4" >
+                                <span>4</span>
+                            </label>
+                            <label class="tcenter flex_1">
+                                <input type="radio" v-model="custom.feng" value="5" >
+                                <span>5</span>
+                            </label>
                         </dd>
                         <!-- <dd class="flex acenter jcenter">
                             <label>间隔</label>
@@ -121,9 +142,9 @@
                             <i class="iconfont icon-shijian big"></i>
                         </dd> -->
                     </dl>
-                    <div class="dialog_footer tright" v-if="customlist.length < 4 || customSelected != -1">
+                    <!-- <div class="dialog_footer tright" v-if="customlist.length < 4 || customSelected != -1">
                         <button @click="addCustom">收藏</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <mt-datetime-picker
