@@ -107,28 +107,28 @@
                             <label>风量</label>
                             <!-- <i class="iconfont icon-fengshan small zoomer"></i>
                             <span class="flex_1 span">
-                                <mt-range v-model="custom.feng" :bar-height="5" :min="1" :max="5" :step="1"></mt-range>
+                                <mt-range v-model="windLevel" :bar-height="5" :min="1" :max="5" :step="1"></mt-range>
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i> -->
                             
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="custom.feng" value="1" >
+                                <input type="radio" v-model="windLevel" value="1" >
                                 <span>一级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="custom.feng" value="2" >
+                                <input type="radio" v-model="windLevel" value="2" >
                                 <span>二级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="custom.feng" value="3" >
+                                <input type="radio" v-model="windLevel" value="3" >
                                 <span>三级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="custom.feng" value="4" >
+                                <input type="radio" v-model="windLevel" value="4" >
                                 <span>四级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="custom.feng" value="5" >
+                                <input type="radio" v-model="windLevel" value="5" >
                                 <span>五级</span>
                             </label>
                         </dd>
@@ -192,17 +192,19 @@
                 heatingModel: 1,
                 windModel: 1,
                 powerOn: false,
-                custom: {
-                    feng: 2
-                    // jian: 8
-                },
+                isOnLine: false,
+                windLevel: 2,
                 mask: false,
                 customlist: [],
                 customSelected: -1,
                 currDate: '',
                 formatDate: '',
                 minDate: new Date(),
-                maxDate: new Date()
+                maxDate: new Date(),
+                isPowerOnTime: false,
+                powerOnTime: '',
+                isPowerOffTime: false,
+                powerOffTime: ''
             },
             created: function () {
                 var now = new Date();
@@ -269,11 +271,8 @@
                 }
             },
             watch: {
-                'custom.feng': debounce(200, false, function (v) {
+                windLevel: debounce(200, false, function (v) {
                     msgToSer('wind_level');
-                }),
-                'custom.jian': debounce(200, false, function (v) {
-                    msgToSer('wind_interval');
                 })
             }
         });
@@ -295,9 +294,20 @@
                 }
                 // 赋值方法
                 Ctrl.windNum = data.windNum;
+                Ctrl.windLevel = data.windLevel;
                 Ctrl.heatingModel = data.heatingModel;
                 Ctrl.windModel = data.windModel;
                 Ctrl.powerOn = data.powerOn == 'true' ? true : false;
+                Ctrl.isOnLine = data.isOnLine == 'true' ? true : false;
+                Ctrl.isPowerOnTime = data.isPowerOnTime == 'true' ? true : false;
+                Ctrl.powerOnTime = data.powerOnTime;
+                Ctrl.isPowerOffTime = data.isPowerOffTime == 'true' ? true : false;
+                Ctrl.powerOffTime = data.powerOffTime;
+                if(Ctrl.powerOn) {
+                     Ctrl.currDate = Ctrl.isPowerOffTime ? Ctrl.powerOffTime : ''
+                } else {
+                     Ctrl.currDate = Ctrl.isPowerOnTime ? Ctrl.powerOnTime : ''
+                }
             });
             //断开连接（系统方法disconnct不可更改为其它）
             socket.on('disconnect', function () {
@@ -318,7 +328,7 @@
                 pageName: 'control',
                 deviceId: deviceId,
                 command: command,
-                level: Ctrl.custom.feng, // 风量等级
+                level: Ctrl.windLevel, // 风量等级
                 // interval: Ctrl.custom.jian, // 运行间隔
                 time: Ctrl.formatDate // 预约时间（yyyy-MM-dd HH:mm）
             };
