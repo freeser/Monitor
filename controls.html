@@ -86,6 +86,9 @@
                 </dl>
             </section>
             <footer class="flex">
+                <button type="button" class="flex_1" :class="{'active': powerOn}" @click="testRefresh">
+                    <i class="iconfont icon-guanji"></i> 测试刷新
+                </button>
                 <button type="button" class="flex_1" :class="{'active': powerOn}" @click="powerManager">
                     <i class="iconfont icon-guanji"></i> {{ !powerOn ? "开机" : "关机"}}
                 </button>
@@ -228,6 +231,10 @@
                 },
                 powerManager: function () {
                     msgToSer('power');
+                },
+                testRefresh: function () {
+                    alert("ok");
+                    msgToSer('testRefresh');
                 },
                 openpicker: function () {
                     this.minDate = new Date();
