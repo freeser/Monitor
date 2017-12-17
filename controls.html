@@ -92,9 +92,9 @@
                 <button type="button" class="flex_1" :class="{'active': powerOn}" @click="powerManager">
                     <i class="iconfont icon-guanji"></i> {{ !powerOn ? "开机" : "关机"}}
                 </button>
-                <button type="button" class="hastime ohidden" @click="openpicker">
+                <!-- <button type="button" class="hastime ohidden" @click="openpicker">
                     <i class="iconfont icon-dingshi"></i> 定时{{ !powerOn ? "开机" : "关机"}}
-                </button>
+                </button> -->
             </footer>
         </section>
         <section style="height: 0;">
@@ -113,25 +113,25 @@
                                 <mt-range v-model="windLevel" :bar-height="5" :min="1" :max="5" :step="1"></mt-range>
                             </span>
                             <i class="iconfont icon-fengshan big zoomer"></i> -->
-                            
+
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="1" >
+                                <input type="radio" v-model="windLevel" value="1">
                                 <span>一级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="2" >
+                                <input type="radio" v-model="windLevel" value="2">
                                 <span>二级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="3" >
+                                <input type="radio" v-model="windLevel" value="3">
                                 <span>三级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="4" >
+                                <input type="radio" v-model="windLevel" value="4">
                                 <span>四级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="5" >
+                                <input type="radio" v-model="windLevel" value="5">
                                 <span>五级</span>
                             </label>
                         </dd>
@@ -150,13 +150,7 @@
                     </div> -->
                 </div>
             </div>
-            <mt-datetime-picker
-                ref="datetime"
-                v-model="currDate"
-                :start-date="minDate"
-                :end-date="maxDate"
-                @cancel="chooseDate"
-                @confirm="chooseDate">
+            <mt-datetime-picker ref="datetime" v-model="currDate" :start-date="minDate" :end-date="maxDate" @cancel="chooseDate" @confirm="chooseDate">
             </mt-datetime-picker>
         </section>
     </div>
@@ -196,7 +190,7 @@
                 windModel: 1,
                 powerOn: false,
                 isOnLine: false,
-                windLevel: 2,
+                windLevel: -1,
                 mask: false,
                 customlist: [],
                 customSelected: -1,
@@ -228,6 +222,9 @@
                         this.mask = true;
                     }
                     msgToSer(key);
+                    if (key == 'wind_auto') {
+                        msgToSer('testRefresh');
+                    }
                 },
                 powerManager: function () {
                     msgToSer('power');
@@ -310,10 +307,10 @@
                 Ctrl.powerOnTime = data.powerOnTime;
                 Ctrl.isPowerOffTime = data.isPowerOffTime == 'true' ? true : false;
                 Ctrl.powerOffTime = data.powerOffTime;
-                if(Ctrl.powerOn) {
-                     Ctrl.currDate = Ctrl.isPowerOffTime ? Ctrl.powerOffTime : ''
+                if (Ctrl.powerOn) {
+                    Ctrl.currDate = Ctrl.isPowerOffTime ? Ctrl.powerOffTime : ''
                 } else {
-                     Ctrl.currDate = Ctrl.isPowerOnTime ? Ctrl.powerOnTime : ''
+                    Ctrl.currDate = Ctrl.isPowerOnTime ? Ctrl.powerOnTime : ''
                 }
             });
             //断开连接（系统方法disconnct不可更改为其它）
@@ -331,6 +328,10 @@
         }
 
         function msgToSer(command) {
+            if ('refresh' != command && -1 == Ctrl.windLevel) {
+                alert("正在连接设备，请稍后再试");
+                return;
+            }
             var jsonObject = {
                 pageName: 'control',
                 deviceId: deviceId,
