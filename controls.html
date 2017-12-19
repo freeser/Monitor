@@ -150,8 +150,8 @@
                     </div> -->
                 </div>
             </div>
-            <mt-datetime-picker ref="datetime" v-model="currDate" :start-date="minDate" :end-date="maxDate" @cancel="chooseDate" @confirm="chooseDate">
-            </mt-datetime-picker>
+            <!-- <mt-datetime-picker ref="datetime" v-model="currDate" :start-date="minDate" :end-date="maxDate" @cancel="chooseDate" @confirm="chooseDate">
+            </mt-datetime-picker> -->
         </section>
     </div>
     <script src="js/jquery.min.js"></script>
@@ -205,7 +205,7 @@
             },
             created: function () {
                 var now = new Date();
-                this.maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate())
+                // this.maxDate = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate())
             },
             mounted: function () {
                 this.customlist = JSON.parse(localStorage.getItem('_cache_custom_') || '[]');
@@ -234,45 +234,45 @@
                     msgToSer('testRefresh');
                 },
                 openpicker: function () {
-                    this.minDate = new Date();
-                    this.$refs.datetime.open();
+                    // this.minDate = new Date();
+                    // this.$refs.datetime.open();
                 },
                 chooseDate: function (value) {
-                    this.formatDate = value ? value.Format('yyyy-MM-dd hh:mm') : '';
-                    msgToSer(this.powerOn ? 'power_off_time' : 'power_on_time')
+                    // this.formatDate = value ? value.Format('yyyy-MM-dd hh:mm') : '';
+                    // msgToSer(this.powerOn ? 'power_off_time' : 'power_on_time')
                 },
-                selectCustom: function (idx) {
-                    if (idx != -1) {
-                        var item = this.customlist[idx];
-                        this.custom = JSON.parse(JSON.stringify(item.key || this.custom));
-                    } else {
-                        this.custom = JSON.parse(JSON.stringify(this.custom));
-                    }
-                    this.customSelected = idx;
-                },
-                addCustom: function () {
-                    if (this.customSelected > -1) {
-                        var item = this.customlist[this.customSelected];
-                        item.key = this.custom;
-                        alert('更新 ' + item.name + ' 成功');
-                    } else if (this.customlist.length < 4) {
-                        var name = prompt('请输入一个名称', '收藏' + this.customlist.length);
-                        if (name) {
-                            this.customlist.push({
-                                name: name,
-                                key: this.custom
-                            });
-                            this.customSelected = this.customlist.length - 1;
-                            alert('添加 ' + name + ' 成功');
-                        }
-                    }
-                    localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
-                },
-                clearstar: function () {
-                    this.customSelected = -1;
-                    this.customlist = [];
-                    localStorage.removeItem('_cache_custom_');
-                }
+                // selectCustom: function (idx) {
+                //     if (idx != -1) {
+                //         var item = this.customlist[idx];
+                //         this.custom = JSON.parse(JSON.stringify(item.key || this.custom));
+                //     } else {
+                //         this.custom = JSON.parse(JSON.stringify(this.custom));
+                //     }
+                //     this.customSelected = idx;
+                // },
+                // addCustom: function () {
+                //     if (this.customSelected > -1) {
+                //         var item = this.customlist[this.customSelected];
+                //         item.key = this.custom;
+                //         alert('更新 ' + item.name + ' 成功');
+                //     } else if (this.customlist.length < 4) {
+                //         var name = prompt('请输入一个名称', '收藏' + this.customlist.length);
+                //         if (name) {
+                //             this.customlist.push({
+                //                 name: name,
+                //                 key: this.custom
+                //             });
+                //             this.customSelected = this.customlist.length - 1;
+                //             alert('添加 ' + name + ' 成功');
+                //         }
+                //     }
+                //     localStorage.setItem('_cache_custom_', JSON.stringify(this.customlist));
+                // },
+                // clearstar: function () {
+                //     this.customSelected = -1;
+                //     this.customlist = [];
+                //     localStorage.removeItem('_cache_custom_');
+                // }
             }
         });
 
@@ -288,8 +288,8 @@
             //接收消息
             socket.on('clientMsg', function (data) {
                 console.log('clientMsg', data);
-                if ('null' == data || !data) {
-                    return;
+                if ('null' == data || !data || data.pageName != 'control') {
+                    return
                 }
                 // 赋值方法
                 Ctrl.windNum = data.windNum;

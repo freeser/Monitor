@@ -167,7 +167,7 @@
         //接收消息
         socket.on('clientMsg', function (data) {
           console.log('clientMsg', data);
-          if ('null' == data || !data) {
+          if ('null' == data || !data || data.pageName != 'index') {
             return
           }
           // 赋值方法
