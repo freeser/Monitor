@@ -6,6 +6,7 @@
     <meta name=viewport content="width=device-width,height=device-height,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
     <title>我的新风质量</title>
     <script src="js/fontsize.js"></script>
+    <link rel="stylesheet" href="libs/mint-ui/style.css">
     <link rel="stylesheet" href="font/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css?a=i">
@@ -30,8 +31,26 @@
               <i class="iconfont icon-more"></i>
             </a>
           </div>
+          <button @click="getDevices">
+            <i class="iconfont icon-shebei"></i>
+          </button>
           <a :href="isOnLine ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !isOnLine}"></a>
         </div>
+        <section style="height: 0;">
+          <div class="fixed top left bottom right h100vh dialog" @click.self="mask=false" v-show="mask">
+            <div class="dialog_content customModel fixed bottom left right">
+              <dl id="myranger" class="dialog_section">
+                <dt class="strong big16">设备列表</dt>
+                <dd v-for="(item,index) in deviceList" :key="index" @click="selectDeviced(item.deviceId)">
+                    <mt-cell :title="item.remark + '(' + item.isAdmin + ')'" :label="item.deviceId">
+                        <mt-button size="small" type="primary" @click.stop.prevent.self="modifyName(item.remark)">修改名称</mt-button>
+                        <span v-if="deviceId == item.deviceId" style="color: green" class="iconfont icon-zaixian big21"></span>
+                    </mt-cell>
+                </dd>
+              </dl>
+            </div>
+          </div>
+        </section>
       </header>
       <section class="mainpage flex_1 scroll">
         <dl class="flex column h100 bbox">
@@ -83,22 +102,7 @@
                 </p>
               </div>
             </div>
-            <!-- <div class="flex_1 flex column acenter jcenter item">
-                    <p>
-                      <span>TVQC</span>
-                    </p>
-                    <p class="colormain">{{tvqc}}&emsp;{{tvqcNum}}pg/m³</p>
-                </div> -->
           </dd>
-          <!-- <dd class="flex_1 flex">
-                  <div class="flex_1 flex column acenter jcenter item">
-                      <p>
-                        <span>CO2</span>
-                      </p>
-                      <p class="colormain">{{co2}}&emsp;{{co2Num}}pg/m³</p>
-                  </div>
-                  
-                </dd> -->
         </dl>
       </section>
       <footer>
@@ -108,6 +112,7 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/socket.io.js"></script>
     <script src="js/vue.min.js"></script>
+    <script src="libs/mint-ui/index.js"></script>
     <script src="js/hammer.min.js"></script>
     <script>
       function getParam(name, href) {
@@ -117,6 +122,7 @@
         var results = regex.exec(href || window.location.href);
         return results ? results[1] : "";
       }
+      Vue.use(MINT);
     </script>
     <script>
       var socket, timer, deviceId, Page;
@@ -158,7 +164,6 @@
       }
 
       function initPage() {
-
         socket = io.connect('http://api.windme.cn:3000/');
         socket.on('connect', function () {
           log('连接成功：' + socket.id);
@@ -216,7 +221,9 @@
             temperature: '-',
             humidity: '-',
             deviceId: deviceId,
-            isOnLine: false
+            isOnLine: false,
+            deviceList: [],
+            mask: false
           },
           mounted: function () {
             document.getElementsByTagName('body')[0].style.display = 'block';
@@ -225,6 +232,43 @@
             hamm.on('swipe', function (ev) {
               deviceId && ev.direction == 2 && (location.href = 'controls.html?deviceId=' + deviceId)
             });
+          },
+          methods: {
+            getDevices: function () {
+              openid && $.post('http://www.windme.cn:8090/device/list', {
+                openid: openid
+              }).done(function (data) {
+                Page.deviceList = JSON.parse(data.data);
+              }).fail(function () {
+                Page.deviceList = []
+              }).always(function(){
+                Page.mask = true
+              })
+            },
+            selectDeviced: function(did) {
+              this.deviceId = deviceId = did;
+              deviceId && $.post('http://www.windme.cn:8090/device/default', {
+                openid: openid,
+                deviceId: deviceId
+              }).always(function(){
+                Page.mask = false
+              })
+            },
+            modifyName: function(name) {
+              this.$messagebox.prompt('请输入设备名称', {
+                inputValue: name,
+                inputPlaceholder: '请输入设备名称'
+              }).then(function(o){
+                o.value && $.post('http://www.windme.cn:8090/device/edit', {
+                  openid: openid,
+                  deviceId: deviceId,
+                  name: name
+                }).always(function(){
+                  Page.$toast('设备名称更新成功');
+                  Page.mask = false;
+                })
+              });
+            }
           }
         })
       }
