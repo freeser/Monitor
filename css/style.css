@@ -418,3 +418,7 @@
 .mt-range .mt-range-progress {
   background-color: #27C06D;
 }
+.customtitle .mint-button {
+  zoom: .6;
+  height: auto;
+}
