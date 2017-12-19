@@ -115,23 +115,23 @@
                             <i class="iconfont icon-fengshan big zoomer"></i> -->
 
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="1">
+                                <input type="radio" v-model="windLevel" value="1" @change="toggel('wind_level')">
                                 <span>一级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="2">
+                                <input type="radio" v-model="windLevel" value="2" @change="toggel('wind_level')">
                                 <span>二级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="3">
+                                <input type="radio" v-model="windLevel" value="3" @change="toggel('wind_level')">
                                 <span>三级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="4">
+                                <input type="radio" v-model="windLevel" value="4" @change="toggel('wind_level')">
                                 <span>四级</span>
                             </label>
                             <label class="tcenter flex_1 xbutton">
-                                <input type="radio" v-model="windLevel" value="5">
+                                <input type="radio" v-model="windLevel" value="5" @change="toggel('wind_level')">
                                 <span>五级</span>
                             </label>
                         </dd>
@@ -273,11 +273,6 @@
                     this.customlist = [];
                     localStorage.removeItem('_cache_custom_');
                 }
-            },
-            watch: {
-                windLevel: debounce(200, false, function (v) {
-                    msgToSer('wind_level');
-                })
             }
         });
 
