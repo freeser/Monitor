@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="libs/mint-ui/style.css">
     <link rel="stylesheet" href="font/iconfont.css">
     <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css?a=i">
+    <link rel="stylesheet" href="css/style.css?a=201712191801">
   </head>
 
   <body style="display:none;">
@@ -31,7 +31,7 @@
               <i class="iconfont icon-more"></i>
             </a>
           </div>
-          <button @click="getDevices">
+          <button class="shebiebtn" @click="getDevices">
             <i class="iconfont icon-shebei"></i>
           </button>
           <a :href="isOnLine ? '#' : 'wifi.html'" class="iconfont icon-wifi" :class="{'disabled': !isOnLine}"></a>
