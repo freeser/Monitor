@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name=viewport content="width=device-width,height=device-height,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+        <title>操作确认</title>
+        <script src="js/fontsize.js"></script>
+        <link rel="stylesheet" href="libs/mint-ui/style.css">
+        <script src="js/jquery.min.js"></script>
+        <script src="js/vue.js"></script>
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script src="libs/mint-ui/index.js"></script>
+        <script>
+            Vue.use(MINT);
+            $(function () {
+                $.ajax({
+                    type: "post",
+                    url: "http://www.windme.cn/api/wcontrl/sign",
+                    dataType: "json",
+                    success: function (data) {
+                        wx.config({
+                            beta: true,
+                            debug: false,
+                            appId: data.appId,
+                            timestamp: data.timestamp,
+                            nonceStr: data.nonce,
+                            signature: data.signature,
+                            jsApiList: ['closeWindow']
+                        });
+                    }
+                });
+
+            });
+        </script>
+    </head>
+
+    <body>
+        <section class="h100vh" id="confirm"></section>
+        <script>
+            new Vue({
+                el: '#confirm',
+                created() {
+                    var that = this;
+                    this.$messagebox.confirm('确定执行此操作?').then(function() {
+                        that.postDB(true)
+                    }).catch(function() {
+                        that.postDB(false)
+                    });
+                },
+                methods: {
+                    postDB(bol) {
+                        // 根据bol判断是取消还是确定
+                        // $.post('', {})
+
+                        wx.ready(function () {
+                            wx.closeWindow();
+                        });
+                    }
+                }
+            })
+        </script>
+    </body>
+
+</html>
